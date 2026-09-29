@@ -1,0 +1,310 @@
+@import 'tailwindcss';
+@theme {
+  --font-sans: 'Segoe UI', system-ui, sans-serif;
+  --color-indigo-50: #f5f3ff;
+  --color-indigo-100: #ede9fe;
+  --color-indigo-200: #ddd6fe;
+  --color-indigo-300: #c4b5fd;
+  --color-indigo-400: #a78bfa;
+  --color-indigo-500: #8b5cf6;
+  --color-indigo-600: #7c3aed;
+  --color-indigo-700: #6d28d9;
+  --color-indigo-800: #5b21b6;
+  --color-indigo-900: #4c1d95;
+  --color-indigo-950: #2e1065;
+  --color-slate-50: #faf9fd;
+  --color-slate-100: #f1eff7;
+  --color-slate-200: #e4e0ef;
+  --color-slate-300: #cbc5db;
+  --color-slate-400: #817890;
+  --color-slate-500: #6b617b;
+  --color-slate-600: #554b66;
+  --color-slate-700: #41364f;
+  --color-slate-800: #2f253d;
+  --color-slate-900: #231a30;
+  --color-slate-950: #160f21;
+}
+@layer base {
+  body {
+    margin: 0;
+    background: #f6f4fb;
+  }
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+  }
+  button:not(:disabled),
+  select {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+  :focus-visible {
+    outline: 3px solid #8b5cf6;
+    outline-offset: 3px;
+  }
+  input:not([type='checkbox']):not([type='radio']),
+  select {
+    min-height: 44px;
+  }
+  input,
+  select,
+  textarea {
+    accent-color: #7c3aed;
+  }
+  ::selection {
+    background: #ddd6fe;
+    color: #4c1d95;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  th {
+    white-space: nowrap;
+  }
+  td {
+    vertical-align: middle;
+  }
+}
+.app-shell {
+  background: #f6f4fb;
+}
+.workspace {
+  height: 100dvh;
+}
+.workspace-header {
+  min-height: 88px;
+  gap: 16px;
+}
+.workspace-content {
+  padding-top: 32px;
+  padding-bottom: 48px;
+}
+.brand-sidebar {
+  background: #251342;
+  width: 260px;
+}
+.brand-sidebar nav button {
+  min-height: 46px;
+}
+.brand-sidebar nav button[aria-current='page'] {
+  background: #ede9fe;
+  color: #4c1d95;
+  box-shadow: none;
+}
+.brand-sidebar nav button[aria-current='page'] svg {
+  color: #7c3aed;
+}
+.brand-sidebar .text-slate-400,
+.brand-sidebar .text-slate-500 {
+  color: #bdb0d5;
+}
+.brand-sidebar .text-slate-300 {
+  color: #e7def7;
+}
+.dashboard-hero {
+  position: relative;
+  overflow: hidden;
+  background: #ede7fa;
+  border-color: #ded3f1;
+  padding: 32px;
+  min-height: 186px;
+}
+.dashboard-hero::after {
+  content: '';
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border: 36px solid #cab9ea;
+  border-radius: 50%;
+  right: -90px;
+  top: -100px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+.dashboard-hero > * {
+  position: relative;
+  z-index: 1;
+}
+.eyebrow {
+  color: #75539d;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.dashboard-hero h2 {
+  font-size: clamp(24px, 2.3vw, 34px);
+  font-weight: 650;
+  line-height: 1.2;
+}
+.dashboard-hero p {
+  max-width: 480px;
+  line-height: 1.7;
+}
+.dashboard-metrics > div {
+  padding: 25px;
+  border-top: 3px solid #ddd6fe;
+  box-shadow: 0 4px 20px #231a3004;
+}
+.dashboard-metrics > div:nth-child(2) {
+  border-top-color: #9e87d1;
+}
+.dashboard-metrics > div:nth-child(3) {
+  border-top-color: #c4a2df;
+}
+.dashboard-metrics > div:nth-child(4) {
+  border-top-color: #b5a1d5;
+}
+.dashboard-metrics .text-3xl {
+  font-size: 36px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+.workspace-content table thead {
+  background: #faf9fd;
+}
+.workspace-content tbody tr:hover {
+  background: #f5f3ff80;
+}
+.skip-link {
+  position: fixed;
+  top: -80px;
+  left: 16px;
+  z-index: 100;
+  padding: 12px 20px;
+  background: white;
+  color: #6d28d9;
+  border-radius: 10px;
+}
+.skip-link:focus {
+  top: 12px;
+}
+@media (max-width: 1023px) {
+  .brand-sidebar {
+    width: 232px;
+  }
+  .workspace-header {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 639px) {
+  .workspace-header {
+    min-height: 76px;
+    gap: 12px;
+  }
+  .workspace-content {
+    padding-top: 20px;
+  }
+  .dashboard-hero {
+    padding: 24px;
+    min-height: auto;
+  }
+  .dashboard-hero > button {
+    width: 100%;
+  }
+  .dashboard-metrics {
+    gap: 12px;
+  }
+  .dashboard-metrics > div {
+    padding: 20px;
+  }
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+:root {
+  --brand-gradient: linear-gradient(120deg, #7c3aed, #9333ea 60%, #6d28d9);
+  --sidebar-gradient: linear-gradient(165deg, #30194e, #24123f 60%, #381760);
+}
+[data-palette='plum'] {
+  --brand-gradient: linear-gradient(120deg, #a21caf, #7e22ce 60%, #6d28d9);
+  --sidebar-gradient: linear-gradient(165deg, #46134e, #2c123f 60%, #51175a);
+}
+.brand-sidebar {
+  background: var(--sidebar-gradient);
+}
+.primary-button,
+button.bg-indigo-600 {
+  background: var(--brand-gradient);
+  box-shadow: 0 5px 15px #7c3aed20;
+  transition:
+    filter 0.2s,
+    transform 0.2s;
+}
+.primary-button:hover,
+button.bg-indigo-600:hover {
+  filter: brightness(1.08);
+}
+.primary-button:active {
+  transform: translateY(1px);
+}
+.brand-sidebar nav button[aria-current='page'] {
+  background: linear-gradient(110deg, #8b5cf6, #a855f7);
+  color: white;
+  box-shadow: 0 5px 18px #13052230;
+}
+.brand-sidebar nav button[aria-current='page'] svg {
+  color: white;
+}
+.dashboard-hero {
+  background: linear-gradient(115deg, #eee8fc, #f5eefe 65%, #e9ddfa);
+  border-color: #e3d8f4;
+}
+.dashboard-hero::after {
+  border-color: #cfb9f0;
+}
+.auth-page {
+  background:
+    radial-gradient(ellipse at top left, #e6dbff, transparent 55%),
+    radial-gradient(ellipse at bottom right, #f3defd, transparent 50%), #f8f6fd;
+}
+.auth-story {
+  background: var(--sidebar-gradient);
+}
+.settings-dialog::backdrop {
+  background: #170a2a99;
+  backdrop-filter: blur(6px);
+}
+[data-width='wide'] .workspace-content {
+  max-width: none;
+}
+[data-density='compact'] .workspace-content td,
+[data-density='compact'] .workspace-content th {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+[data-motion='false'] *,
+[data-motion='false'] *::before,
+[data-motion='false'] *::after {
+  animation: none !important;
+  transition: none !important;
+}
+@media (max-width: 1023px) {
+  .auth-story {
+    padding: 28px 32px;
+    gap: 0;
+  }
+  .auth-story > div:nth-child(2),
+  .auth-story > p {
+    display: none;
+  }
+}

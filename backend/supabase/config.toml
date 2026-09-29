@@ -1,0 +1,2 @@
+# Authentication and application data access are handled by the Node server.
+# Do not deploy the legacy Supabase Auth functions in supabase/functions.
