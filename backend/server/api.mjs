@@ -78,6 +78,13 @@ function getCookie(req, name) {
   }
 }
 
+function getBearerToken(req) {
+  const authorization = req.get('authorization');
+  if (typeof authorization !== 'string') return '';
+  const match = authorization.match(/^Bearer\s+([^\s]+)$/i);
+  return match?.[1] || '';
+}
+
 function safeUser(user) {
   const {
     password_hash,
@@ -276,13 +283,14 @@ export function createApiRouter({
         user: safeUser(user),
         mustChangePassword: Boolean(user.must_change_password),
         passwordExpiresAt: user.password_expires_at,
+        sessionToken: token,
       });
     }),
   );
 
   router.use(
     route(async (req, res, next) => {
-      const token = getCookie(req, SESSION_COOKIE);
+      const token = getBearerToken(req) || getCookie(req, SESSION_COOKIE);
       if (!token) return res.status(401).json({ error: 'Please sign in.' });
       const { data: session, error: sessionError } = await db
         .from('app_sessions')

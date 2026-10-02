@@ -10,6 +10,24 @@ export class ApiError extends Error {
 // In production on separate hosts, set VITE_API_URL in frontend env (e.g., https://my-api.onrender.com).
 // If empty, it defaults to relative `/api`, which works with Vite proxy in dev or reverse proxies in prod.
 const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+const SESSION_TOKEN_KEY = 'matrientry_session_token';
+
+function getSessionToken() {
+  try {
+    return localStorage.getItem(SESSION_TOKEN_KEY) || '';
+  } catch {
+    return '';
+  }
+}
+
+function setSessionToken(token: string) {
+  try {
+    if (token) localStorage.setItem(SESSION_TOKEN_KEY, token);
+    else localStorage.removeItem(SESSION_TOKEN_KEY);
+  } catch {
+    // Cookie authentication can still work when storage is unavailable.
+  }
+}
 
 type LoadingListener = (busy: boolean) => void;
 const loadingListeners = new Set<LoadingListener>();
@@ -40,24 +58,30 @@ export async function apiRequest<T = any>(
   const silent = isSilentRequest(path, options.method);
   if (!silent) setInFlight(1);
   try {
+    const token = getSessionToken();
+    const headers: Record<string, string> = { Accept: 'application/json' };
+    if (options.body !== undefined) headers['Content-Type'] = 'application/json';
+    if (token) headers.Authorization = `Bearer ${token}`;
     const response = await fetch(`${API_BASE}/api${path}`, {
       method: options.method || 'GET',
       credentials: 'include',
-      headers:
-        options.body === undefined
-          ? { Accept: 'application/json' }
-          : { Accept: 'application/json', 'Content-Type': 'application/json' },
+      headers,
       body:
         options.body === undefined ? undefined : JSON.stringify(options.body),
     });
     const payload = await response.json().catch(() => null);
-    if (!response.ok)
+    if (!response.ok) {
+      if (response.status === 401 && path !== '/auth/login') setSessionToken('');
       throw new ApiError(
         typeof payload?.error === 'string'
           ? payload.error
           : 'The request could not be completed.',
         response.status,
       );
+    }
+    if (path === '/auth/login' && typeof payload?.sessionToken === 'string')
+      setSessionToken(payload.sessionToken);
+    if (path === '/auth/logout') setSessionToken('');
     return payload as T;
   } finally {
     if (!silent) setInFlight(-1);

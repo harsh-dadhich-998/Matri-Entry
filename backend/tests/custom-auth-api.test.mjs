@@ -96,12 +96,19 @@ test('operator sessions are scoped to their data and cannot call admin routes', 
   assert.equal(login.status, 200);
   const loginBody = await login.json();
   assert.equal('password_hash' in loginBody.user, false);
+  assert.equal(typeof loginBody.sessionToken, 'string');
   const cookieHeader = login.headers.get('set-cookie');
   assert.ok(cookieHeader.includes('HttpOnly'));
   assert.ok(cookieHeader.includes('SameSite=Strict'));
   const cookie = cookieHeader.split(';', 1)[0];
   const token = cookie.split('=', 2)[1];
   assert.notEqual(harness.tables.app_sessions[0].token_hash, token);
+  assert.notEqual(harness.tables.app_sessions[0].token_hash, loginBody.sessionToken);
+
+  const bearerSession = await fetch(`${harness.baseUrl}/auth/session`, {
+    headers: { Authorization: `Bearer ${loginBody.sessionToken}` },
+  });
+  assert.equal(bearerSession.status, 200);
 
   const workspaceResponse = await fetch(`${harness.baseUrl}/workspace`, { headers: { Cookie: cookie } });
   assert.equal(workspaceResponse.status, 200);
