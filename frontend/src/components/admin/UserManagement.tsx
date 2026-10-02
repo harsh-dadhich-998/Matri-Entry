@@ -121,13 +121,20 @@ export function UserManagement({
         `/admin/operators/${encodeURIComponent(editing.id)}/reset-password`,
         { method: 'POST' },
       );
-      showToast(
-        data.emailSent ? 'success' : 'warning',
-        'Password reset',
-        data.emailSent
-          ? 'Resend accepted the new temporary login email.'
-          : 'Email failed. Check Resend configuration, then retry sending fresh credentials.',
-      );
+      dialog.current?.close();
+      setOpen(false);
+      setEditing(null);
+      onCloseCreateModal();
+      onUsersUpdated();
+      window.requestAnimationFrame(() => {
+        showToast(
+          data.emailSent ? 'success' : 'warning',
+          'Password reset',
+          data.emailSent
+            ? 'Resend accepted the new temporary login email.'
+            : 'Email failed. Check Resend configuration, then retry sending fresh credentials.',
+        );
+      });
     } catch (error) {
       showToast('error', 'Reset failed', errorMessage(error));
     } finally {
