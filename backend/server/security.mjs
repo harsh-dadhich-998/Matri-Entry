@@ -13,7 +13,7 @@ const SCRYPT_OPTIONS = { N: 16384, r: 8, p: 1, maxmem: 64 * 1024 * 1024 };
 export function isStrongPassword(value) {
   return (
     typeof value === 'string' &&
-    value.length >= 12 &&
+    value.length >= 8 &&
     value.length <= 128 &&
     /[a-z]/.test(value) &&
     /[A-Z]/.test(value) &&

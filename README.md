@@ -100,12 +100,12 @@ Mt Latest/
 
 ## Initial Admin Bootstrap
 
-To create or reset the first administrator profile:
+To create or reset an administrator profile with a password (minimum 8 characters):
 ```bash
 cd backend
-npm run admin:bootstrap -- --name "Admin Name" --email admin@example.com --username admin_name
+npm run admin:bootstrap -- --name "Admin Name" --email admin@example.com --username admin_name --password "YourAdminPassword8+"
 ```
-Temporary login credentials will be emailed to `admin@example.com` via Resend with a link pointing to `FRONTEND_URL`.
+Sign in to the workspace using the admin **Username** and password. (If Resend is configured, a confirmation email will also be sent to the email address).
 
 ---
 

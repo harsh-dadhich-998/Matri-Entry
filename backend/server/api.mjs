@@ -220,26 +220,31 @@ export function createApiRouter({
       recentAttempts.push(now());
       attempts.set(ip, recentAttempts);
 
-      const email =
-        typeof req.body?.email === 'string'
-          ? req.body.email.trim().toLowerCase()
-          : '';
+      const username =
+        typeof req.body?.username === 'string' && req.body.username.trim()
+          ? req.body.username.trim()
+          : typeof req.body?.email === 'string' && req.body.email.trim()
+            ? req.body.email.trim()
+            : '';
       const password =
         typeof req.body?.password === 'string' ? req.body.password : '';
       if (
-        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
-        email.length > 254 ||
+        !username ||
+        username.length > 254 ||
         !password ||
         password.length > 128
       )
         return res
           .status(401)
-          .json({ error: 'The email or password is incorrect.' });
-      const { data: user, error } = await db
-        .from('users')
-        .select('*')
-        .ilike('email', email)
-        .maybeSingle();
+          .json({ error: 'The username or password is incorrect.' });
+
+      let query = db.from('users').select('*');
+      if (username.includes('@')) {
+        query = query.ilike('email', username.toLowerCase());
+      } else {
+        query = query.ilike('username', username.toLowerCase());
+      }
+      const { data: user, error } = await query.maybeSingle();
       const passwordMatches = await verifyPassword(
         password,
         user?.password_hash || DUMMY_PASSWORD_HASH,
@@ -247,7 +252,7 @@ export function createApiRouter({
       if (error || !user || !passwordMatches)
         return res
           .status(401)
-          .json({ error: 'The email or password is incorrect.' });
+          .json({ error: 'The username or password is incorrect.' });
       if (
         user.status !== 'active' ||
         (user.expiry_date && Date.parse(user.expiry_date) <= now())
@@ -368,7 +373,7 @@ export function createApiRouter({
       if (!isStrongPassword(newPassword))
         return res.status(400).json({
           error:
-            'Use 12–128 characters, including uppercase and lowercase letters, a number, and a symbol.',
+            'Use 8–128 characters, including uppercase and lowercase letters, a number, and a symbol.',
         });
       if (currentPassword === newPassword)
         return res.status(400).json({

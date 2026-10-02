@@ -30,14 +30,14 @@ export function ChangePassword({
       return;
     }
     if (
-      password.length < 12 ||
+      password.length < 8 ||
       !/[a-z]/.test(password) ||
       !/[A-Z]/.test(password) ||
       !/[0-9]/.test(password) ||
       !/[^a-zA-Z0-9]/.test(password)
     ) {
       setError(
-        'Use at least 12 characters, with uppercase and lowercase letters, a number, and a symbol.',
+        'Use at least 8 characters, with uppercase and lowercase letters, a number, and a symbol.',
       );
       return;
     }
@@ -134,7 +134,7 @@ export function ChangePassword({
               </label>
             ))}
             <p className="text-xs text-slate-500">
-              Use 12–128 characters, including uppercase and lowercase letters,
+              Use 8–128 characters, including uppercase and lowercase letters,
               a number, and a symbol.
             </p>
             <button

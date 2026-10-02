@@ -159,7 +159,7 @@ test('admin-created operators receive temporary credentials by email, never in t
   assert.equal(harness.tables.app_sessions.some(session => session.user_id === created.id), false);
   const newLogin = await fetch(`${harness.baseUrl}/auth/login`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: created.email, password: newPassword }),
+    body: JSON.stringify({ username: created.username, password: newPassword }),
   });
   assert.equal(newLogin.status, 200);
 

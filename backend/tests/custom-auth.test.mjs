@@ -14,6 +14,7 @@ test('password hashes are salted, verifiable, and do not expose the password', a
 
 test('password policy requires length and character variety', () => {
   assert.equal(isStrongPassword('LongNewPassword!123'), true);
+  assert.equal(isStrongPassword('Pass!123'), true);
   assert.equal(isStrongPassword('short'), false);
   assert.equal(isStrongPassword('longpassword123'), false);
 });

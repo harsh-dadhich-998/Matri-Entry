@@ -66,7 +66,7 @@ socket.onmessage=e=>{
  const shot=async name=>{const {data}=await send('Page.captureScreenshot',{format:'png'});const {writeFile}=await import('node:fs/promises');await writeFile(join(artifacts,name+'.png'),Buffer.from(data,'base64'));};
  await send('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
  await send('Page.navigate',{url:'http://127.0.0.1:4179'});
- await wait('!!document.querySelector("#login-email")');
+ await wait('!!document.querySelector("#login-username")');
  assert.equal(await evaluate('document.body.innerText.includes("Admin Portal")'),false);
  await shot('login-desktop');
  await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
@@ -74,7 +74,7 @@ socket.onmessage=e=>{
  await shot('login-mobile');
  await send('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
  const fill = async (id,value) => evaluate(`(()=>{const input=document.getElementById(${JSON.stringify(id)});Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,${JSON.stringify(value)});input.dispatchEvent(new Event('input',{bubbles:true}));})()`);
- await fill('login-email','browser-test@example.invalid');await fill('login-password','BrowserPassword!123');await click('Sign in');await wait('!!document.querySelector("#main-content")');
+ await fill('login-username','browser_test');await fill('login-password','BrowserPassword!123');await click('Sign in');await wait('!!document.querySelector("#main-content")');
  await wait('location.pathname === "/admin/dashboard"');
  assert.equal(await evaluate('document.body.innerText.includes("Switch to")'),false);
  await click('User Management');await wait('location.pathname === "/admin/users"');
@@ -108,10 +108,10 @@ socket.onmessage=e=>{
  failWrites=false;
  await click('Save as Draft');await wait('document.body.innerText.includes("Draft saved")');
  await clickLabel('Open navigation menu');
- await click('Sign Out');await wait('!!document.querySelector("#login-email")');
+ await click('Sign Out');await wait('!!document.querySelector("#login-username")');
  assert.equal(await evaluate('!!document.querySelector("#main-content")'),false);
  mustChangePassword=true;
- await fill('login-email','browser-test@example.invalid');await fill('login-password','TemporaryPassword!123');await click('Sign in');
+ await fill('login-username','browser_test');await fill('login-password','TemporaryPassword!123');await click('Sign in');
  await wait('!!document.querySelector("#new-password")');
  assert.equal(await evaluate('!!document.querySelector("#main-content")'),false,'Temporary password unlocked records');
  await fill('current-password','TemporaryPassword!123');await fill('new-password','NewPassword!12345');await fill('confirm-password','MismatchPassword!123');

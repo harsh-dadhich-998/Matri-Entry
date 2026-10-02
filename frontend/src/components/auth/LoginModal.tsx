@@ -1,8 +1,8 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Heart,
   ArrowRight,
-  Mail,
+  User,
   ShieldCheck,
   Lock,
   Eye,
@@ -11,7 +11,7 @@ import {
 import { apiRequest, errorMessage } from '../../services/api';
 
 export function LoginModal({ onSignedIn }: { onSignedIn: () => void }) {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [busy, setBusy] = useState(false);
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -24,7 +24,7 @@ export function LoginModal({ onSignedIn }: { onSignedIn: () => void }) {
     try {
       await apiRequest('/auth/login', {
         method: 'POST',
-        body: { email: email.trim(), password },
+        body: { username: username.trim(), password },
       });
       setPassword('');
       onSignedIn();
@@ -32,7 +32,7 @@ export function LoginModal({ onSignedIn }: { onSignedIn: () => void }) {
       const message = errorMessage(error);
       setError(
         /invalid login credentials/i.test(message)
-          ? 'The email or password is incorrect. Use the login email from your administrator.'
+          ? 'The username or password is incorrect. Use the login username from your administrator.'
           : message,
       );
     } finally {
@@ -74,27 +74,27 @@ export function LoginModal({ onSignedIn }: { onSignedIn: () => void }) {
             Sign in to your workspace
           </h2>
           <p className="text-sm text-slate-500 leading-relaxed mt-3 mb-8">
-            Enter your work email and password to continue.
+            Enter your username and password to continue.
           </p>
           <form onSubmit={submit} className="space-y-5">
             <div>
               <label
-                htmlFor="login-email"
+                htmlFor="login-username"
                 className="block text-sm font-semibold mb-2"
               >
-                Work email
+                Username
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-3.5 w-5 h-5 text-slate-400" />
+                <User className="absolute left-4 top-3.5 w-5 h-5 text-slate-400" />
                 <input
                   autoFocus
-                  id="login-email"
-                  type="email"
-                  autoComplete="email"
+                  id="login-username"
+                  type="text"
+                  autoComplete="username"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@company.com"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Enter your username"
                   className="w-full border border-slate-200 rounded-xl pl-12 pr-4 py-3"
                 />
               </div>
@@ -145,9 +145,9 @@ export function LoginModal({ onSignedIn }: { onSignedIn: () => void }) {
             </button>
           </form>
           <p className="text-xs text-slate-500 mt-7 leading-relaxed">
-            New account or forgotten password? Ask your administrator to email
-            fresh temporary login details. Sign in with the email address
-            included in that message.
+            New account or forgotten password? Ask your administrator to provide
+            or reset your login details. Sign in with the username provided by
+            your administrator.
           </p>
         </section>
       </div>
